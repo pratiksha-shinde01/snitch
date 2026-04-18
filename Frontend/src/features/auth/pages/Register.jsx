@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useAuth } from "../hook/useAuth"
 import { Link, useNavigate } from 'react-router';
+import ContinueWithGoogle from '../components/ContinueWithGoogle';
+import registerImg from "../../../assets/register-fashion.jpg";
 
 const Register = () => {
 
     const { handleRegister } = useAuth()
     const navigate = useNavigate()
 
-    const [ formData, setFormData ] = useState({
+    const [formData, setFormData] = useState({
         fullName: '',
         contactNumber: '',
         email: '',
@@ -17,154 +19,159 @@ const Register = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [ name ]: type === 'checkbox' ? checked : value
-        }));
+        setFormData({
+            ...formData,
+            [name]: type === "checkbox" ? checked : value
+        });
     };
 
-   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-        await handleRegister({
-            email: formData.email,
-            contact: formData.contactNumber,
-            password: formData.password,
-            isSeller: formData.isSeller,
-            fullname: formData.fullName
-        });
-
-        navigate("/");
-    } catch (error) {
-        alert(
-            error.response?.data?.message ||
-            error.response?.data?.errors?.[0]?.msg ||
-            "Registration failed"
-        );
-    }
-};
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await handleRegister({
+                email: formData.email,
+                contact: formData.contactNumber,
+                password: formData.password,
+                isSeller: formData.isSeller,
+                fullname: formData.fullName
+            });
+            navigate("/");
+        } catch {
+            alert("Registration failed");
+        }
+    };
 
     return (
-        <div className="min-h-screen bg-[#0e0e0e] text-[#e5e2e1] font-sans selection:bg-[#FF8C00] selection:text-[#131313] flex flex-col lg:flex-row">
+        <div className="min-h-screen flex bg-[#fafafa] text-[#111]">
 
-            {/* ✅ LEFT SIDE UPDATED ONLY */}
-            <div className="hidden lg:flex lg:w-1/2 relative bg-[#131313] items-center justify-center overflow-hidden border-r border-[#1c1b1b]">
+            {/* ✅ LEFT IMAGE */}
+            <div className="hidden lg:flex w-1/2 relative overflow-hidden">
 
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1c1b1b] to-[#131313]"></div>
+                {/* 🔥 IMAGE */}
+                <div
+                    className="absolute inset-0 bg-cover bg-no-repeat"
+                    style={{
+                        backgroundImage: `url(${registerImg})`,
+                        backgroundPosition: "center 20%"
+                    }}
+                />
 
-                <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-[#FF8C00]/10 blur-[120px] rounded-full"></div>
-                <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-[#FF8C00]/5 blur-[100px] rounded-full"></div>
+                {/* 🔥 DARK GRADIENT (KEY FIX) */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
 
-                <div className="relative z-10 p-16 flex flex-col h-full justify-between w-full max-w-2xl">
+                {/* 🔥 CONTENT */}
+                <div className="relative z-10 flex flex-col justify-between p-16 w-full max-w-xl mx-auto">
 
-                    <h2 className="text-[#FF8C00] text-xl font-bold tracking-widest uppercase">Snitch.</h2>
+                    <h2 className="text-[#FF8C00] tracking-[0.25em] uppercase text-sm font-semibold">
+                        SNITCH.
+                    </h2>
 
-                    <div className="mt-auto mb-10 w-full space-y-6">
+                    <div className="space-y-6 max-w-md">
 
-                        <p className="text-xs tracking-[0.25em] uppercase text-[#FF8C00]">
+                        <p className="text-xs tracking-[0.35em] text-[#FF8C00] uppercase">
                             Streetwear • Premium • Trending
                         </p>
 
-                        <p className="text-5xl lg:text-7xl font-bold tracking-tighter leading-[1.1] text-white">
-                            Define your <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF8C00] to-[#FFA500]">
-                                aesthetic.
-                            </span>
+                        <h1 className="text-5xl font-semibold leading-tight text-white">
+                            Create your <br /> identity.
+                        </h1>
+
+                        <p className="text-gray-200 text-base leading-relaxed">
+                            Join a community of trendsetters and explore curated fashion collections.
                         </p>
 
-                        <p className="text-[#a39b87] max-w-md text-lg leading-relaxed">
-                            Discover premium clothing, latest drops, and curated styles designed for modern fashion lovers.
-                        </p>
-
-                        <div className="w-full h-px bg-gradient-to-r from-transparent via-[#FF8C00]/40 to-transparent"></div>
-
-                        <div className="flex items-center gap-10 pt-4">
-                            <div>
-                                <p className="text-white font-bold text-xl">10K+</p>
-                                <p className="text-xs text-[#5a5858] uppercase tracking-wider">Products</p>
-                            </div>
-
-                            <div>
-                                <p className="text-white font-bold text-xl">500+</p>
-                                <p className="text-xs text-[#5a5858] uppercase tracking-wider">Brands</p>
-                            </div>
-
-                            <div>
-                                <p className="text-white font-bold text-xl">24/7</p>
-                                <p className="text-xs text-[#5a5858] uppercase tracking-wider">Support</p>
-                            </div>
-                        </div>
+                        <div className="w-12 h-[2px] bg-[#FF8C00]"></div>
 
                     </div>
                 </div>
             </div>
 
-            {/* ✅ RIGHT SIDE (YOUR ORIGINAL — NOT CHANGED) */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 min-h-screen overflow-y-auto z-10 bg-[#0e0e0e]">
-                <div className="w-full max-w-md bg-[#131313] lg:bg-transparent p-10 md:p-14 lg:p-6 rounded-2xl lg:rounded-none shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] lg:shadow-none">
-                    <div className="mb-12">
-                        <h2 className="text-sm uppercase tracking-widest text-[#FF8C00] font-medium mb-3">Welcome to Snitch</h2>
-                        <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-white">Elevate Your Style</h1>
+            {/* ✅ RIGHT FORM */}
+            <div className="flex flex-1 items-center justify-center px-6 sm:px-10 lg:px-16">
+
+                <div className="w-full max-w-md">
+
+                    <div className="mb-10 space-y-2">
+                        <h1 className="text-3xl font-semibold text-[#111]">
+                            Create account
+                        </h1>
+                        <p className="text-gray-500 text-sm">
+                            Start your fashion journey today
+                        </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                    <form onSubmit={handleSubmit} className="space-y-6">
 
-                        {/* 👇 YOUR ORIGINAL INPUTS — untouched */}
-                        <div className="flex flex-col">
-                            <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Full Name</label>
-                            <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required
-                                className="bg-[#1c1b1b] lg:bg-[#0e0e0e] text-white border-b-2 border-[#4d4732] focus:border-[#FF8C00] outline-none px-4 py-3 transition-colors duration-300 focus:bg-[#201f1f] lg:focus:bg-[#131313]"
-                                placeholder="e.g. John Doe"
+                        <div>
+                            <label className="text-sm text-gray-600 block mb-2">
+                                Full Name
+                            </label>
+                            <input
+                                type="text"
+                                name="fullName"
+                                onChange={handleChange}
+                                className="w-full border-b border-gray-300 py-3 outline-none focus:border-[#FF8C00]"
+                                placeholder="John Doe"
                             />
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Contact Number</label>
-                            <input type="tel" name="contactNumber" value={formData.contactNumber} onChange={handleChange} required
-                                className="bg-[#1c1b1b] lg:bg-[#0e0e0e] text-white border-b-2 border-[#4d4732] focus:border-[#FF8C00] outline-none px-4 py-3 transition-colors duration-300 focus:bg-[#201f1f] lg:focus:bg-[#131313]"
-                                placeholder="+1 (555) 000-0000"
+                        <div>
+                            <label className="text-sm text-gray-600 block mb-2">
+                                Phone Number
+                            </label>
+                            <input
+                                type="tel"
+                                name="contactNumber"
+                                onChange={handleChange}
+                                className="w-full border-b border-gray-300 py-3 outline-none focus:border-[#FF8C00]"
+                                placeholder="+91 9876543210"
                             />
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Email Address</label>
-                            <input type="email" name="email" value={formData.email} onChange={handleChange} required
-                                className="bg-[#1c1b1b] lg:bg-[#0e0e0e] text-white border-b-2 border-[#4d4732] focus:border-[#FF8C00] outline-none px-4 py-3 transition-colors duration-300 focus:bg-[#201f1f] lg:focus:bg-[#131313]"
+                        <div>
+                            <label className="text-sm text-gray-600 block mb-2">
+                                Email Address
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                onChange={handleChange}
+                                className="w-full border-b border-gray-300 py-3 outline-none focus:border-[#FF8C00]"
                                 placeholder="hello@example.com"
                             />
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Password</label>
-                            <input type="password" name="password" value={formData.password} onChange={handleChange} required
-                                className="bg-[#1c1b1b] lg:bg-[#0e0e0e] text-white border-b-2 border-[#4d4732] focus:border-[#FF8C00] outline-none px-4 py-3 transition-colors duration-300 focus:bg-[#201f1f] lg:focus:bg-[#131313]"
+                        <div>
+                            <label className="text-sm text-gray-600 block mb-2">
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                name="password"
+                                onChange={handleChange}
+                                className="w-full border-b border-gray-300 py-3 outline-none focus:border-[#FF8C00]"
                                 placeholder="••••••••"
                             />
                         </div>
 
-                        <div className="flex items-center gap-3">
-                            <input type="checkbox" name="isSeller" checked={formData.isSeller} onChange={handleChange}
-                                className="w-5 h-5 accent-[#FF8C00]" />
-                            <span className="text-[#e5e2e1] hover:text-[#FF8C00]">Register as Seller</span>
-                        </div>
+                        <label className="flex items-center gap-2 text-sm text-gray-600">
+                            <input type="checkbox" name="isSeller" onChange={handleChange} />
+                            Register as seller
+                        </label>
 
-                        <a href="/api/auth/google" className="text-sm text-[#e5e2e1] hover:text-[#FF8C00]">
-                            Continue with Google
-                        </a>
-
-                        <button type="submit"
-                            className="mt-6 w-full bg-[#FF8C00] text-[#131313] font-bold py-4 rounded hover:bg-[#FF9C2A] transition">
-                            Sign Up
+                        <button className="w-full bg-[#FF8C00] text-white py-3 font-semibold rounded-lg hover:bg-[#e67e00] transition">
+                            Create Account
                         </button>
 
-                        <div className="text-center mt-6">
-                            <Link to="/login" className="text-sm text-[#999077] hover:text-[#FF8C00]">
-                                Already have an account? Sign in
-                            </Link>
-                        </div>
+                        <ContinueWithGoogle />
 
-                        
+                        <p className="text-sm text-gray-500 text-center">
+                            Already have an account?{" "}
+                            <Link to="/login" className="text-[#FF8C00] font-medium hover:underline">
+                                Sign in
+                            </Link>
+                        </p>
+
                     </form>
                 </div>
             </div>
