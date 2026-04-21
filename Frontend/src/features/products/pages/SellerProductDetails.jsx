@@ -173,7 +173,7 @@ const SellerProductDetails = () => {
         <div className="min-h-screen bg-[#fbf9f6] text-[#1b1c1a] font-sans pb-24">
             {/* Top Banner / Header */}
             <header className="sticky top-0 z-10 bg-[#fbf9f6]/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
-                <h1 className="font-serif text-xl tracking-wide uppercase">{product.title?.substring(0, 20)}{product.title?.length > 20 ? '...' : ''}</h1>
+                <h1 className="font-serif text-xl  tracking-wide uppercase text-[#F97316]">{product.title?.substring(0, 20)}{product.title?.length > 20 ? '...' : ''}</h1>
             </header>
 
             <main className="max-w-6xl mx-auto px-4 md:px-8 mt-8">
@@ -182,11 +182,11 @@ const SellerProductDetails = () => {
                 <section className="flex flex-col md:flex-row gap-8 mb-16">
                     <div className="w-full md:w-1/2">
                         {/* Gallery placeholder */}
-                        <div className="w-full aspect-[4/5] bg-[#f5f3f0] overflow-hidden">
+                        <div className="w-full aspect-[4/5] bg-[#f5f3f0]  overflow-hidden">
                             {product.images && product.images.length > 0 ? (
-                                <img src={product.images[0].url} alt={product.title} className="w-full h-full object-cover" />
+                                <img src={product.images[0].url} alt={product.title} className="w-full h-full  object-cover" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[#7f7668]">No Image</div>
+                                <div className="w-full  h-full flex items-center justify-center text-[#7f7668]">No Image</div>
                             )}
                         </div>
                         {/* Thumbnails */}
@@ -200,7 +200,7 @@ const SellerProductDetails = () => {
                     </div>
 
                     <div className="w-full md:w-1/2 flex flex-col justify-center">
-                        <h2 className="font-serif text-4xl md:text-5xl leading-tight mb-4 uppercase">{product.title}</h2>
+                        <h2 className="font-serif  text-4xl md:text-5xl leading-tight mb-4 uppercase">{product.title}</h2>
                         <p className="text-[#6e6258] text-lg mb-6 leading-relaxed max-w-md">{product.description}</p>
                         <div className="text-2xl tracking-wide font-light mb-8">
                             {product.price?.amount} {product.price?.currency}
