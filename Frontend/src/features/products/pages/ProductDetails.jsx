@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { useParams, Link } from 'react-router'
 import { useProduct } from '../hooks/useProduct'
 import { useSelector } from 'react-redux'
+import { useCart } from '../../cart/hook/useCart'
 
 const ProductDetails = () => {
     const { id } = useParams()
@@ -11,6 +12,7 @@ const ProductDetails = () => {
     const [product, setProduct] = useState(null)
     const [selectedImage, setSelectedImage] = useState(0)
     const [loading, setLoading] = useState(true)
+    const {handleAddItem} = useCart()
 
     // ✅ NEW STATES
     const [selectedAttributes, setSelectedAttributes] = useState({})
@@ -158,7 +160,7 @@ const ProductDetails = () => {
 
             {/* ── NAVBAR ── */}
             <nav className="flex items-center justify-between px-6 sm:px-10 lg:px-20 py-8 border-b border-gray-100 bg-white">
-                <Link to="/" className="text-2xl font-black tracking-[0.2em] text-slate-900">
+                <Link to="/" className="text-2xl font-black  tracking-[0.2em] text-slate-900">
                     SNITCH.
                 </Link>
                 <div className="flex items-center gap-6 text-sm">
@@ -356,6 +358,12 @@ const ProductDetails = () => {
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 pt-2">
                             <button
+                            onClick={()=>{
+                                handleAddItem({
+                                    productId:product._id,
+                                    variantId:activeVariant._id
+                                })
+                            }}
                                 className="flex-1 flex items-center justify-center gap-2 border-2 border-[#FF8C00] text-[#FF8C00]
                                     font-semibold py-4 rounded-xl hover:bg-[#FF8C00] hover:text-white
                                     active:scale-95 transition-all duration-200 text-sm tracking-wide"
