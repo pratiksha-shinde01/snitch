@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const cartSlice = createSlice({
     name: "cart",
     initialState: {
@@ -10,22 +9,53 @@ const cartSlice = createSlice({
         setItems: (state, action) => {
             state.items = action.payload;
         },
+
         addItem: (state, action) => {
-            state.items.push(action.payload)
+            state.items.push(action.payload);
         },
+
         incrementCartItem: (state, action) => {
-            const { productId, variantId } = action.payload
+            const { productId, variantId } = action.payload;
 
             state.items = state.items.map(item => {
                 if (item.product._id === productId && item.variant === variantId) {
-                    return { ...item, quantity: item.quantity + 1 }
-                } else {
-                    return item
+                    return { ...item, quantity: item.quantity + 1 };
                 }
-            })
+                return item;
+            });
+        },
+
+        decrementCartItem: (state, action) => {
+            const { productId, variantId } = action.payload;
+
+            state.items = state.items
+                .map(item => {
+                    if (item.product._id === productId && item.variant === variantId) {
+                        return { ...item, quantity: item.quantity - 1 };
+                    }
+                    return item;
+                })
+                .filter(item => item.quantity > 0); // ✅ remove if 0
+        },
+
+        removeCartItem: (state, action) => {
+            const { productId, variantId } = action.payload;
+
+            state.items = state.items.filter(
+                item =>
+                    !(item.product._id === productId &&
+                      item.variant === variantId)
+            );
         }
     }
-})
+});
 
-export const { setItems, addItem, incrementCartItem } = cartSlice.actions
-export default cartSlice.reducer
+export const {
+    setItems,
+    addItem,
+    incrementCartItem,
+    decrementCartItem,
+    removeCartItem
+} = cartSlice.actions;
+
+export default cartSlice.reducer;
