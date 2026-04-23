@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useCart } from '../../cart/hook/useCart'
 
 const ProductDetails = () => {
-    const { id } = useParams()
+    const { productId } = useParams()
     const { handleGetProductById } = useProduct()
     const user = useSelector(state => state.auth.user)
 
@@ -20,7 +20,7 @@ const ProductDetails = () => {
     async function fetchProductDetails() {
         try {
             setLoading(true)
-            const data = await handleGetProductById(id)
+            const data = await handleGetProductById(productId)
             setProduct(data)
         } catch (err) {
             console.error(err)
@@ -30,8 +30,8 @@ const ProductDetails = () => {
     }
 
     useEffect(() => {
-        if (id) fetchProductDetails()
-    }, [id])
+        if (productId) fetchProductDetails()
+    }, [productId])
 
     // ✅ DEFAULT SELECT FIRST VARIANT
     useEffect(() => {
@@ -158,31 +158,8 @@ const ProductDetails = () => {
     return (
         <div className="min-h-screen bg-[#fafafa] text-[#111]">
 
-            {/* ── NAVBAR ── */}
-            <nav className="flex items-center justify-between px-6 sm:px-10 lg:px-20 py-8 border-b border-gray-100 bg-white">
-                <Link to="/" className="text-2xl font-black  tracking-[0.2em] text-slate-900">
-                    SNITCH.
-                </Link>
-                <div className="flex items-center gap-6 text-sm">
-                    {user ? (
-                        <>
-                            <span className="text-gray-700 font-medium">{user.fullname}</span>
-                            {user.role === 'seller' && (
-                                <Link to="/seller/dashboard" className="text-gray-600 hover:text-[#FF8C00] transition">
-                                    Dashboard
-                                </Link>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/login" className="text-gray-600 hover:text-[#FF8C00] transition">Login</Link>
-                            <Link to="/register" className="bg-[#FF8C00] text-white px-4 py-2 rounded-md hover:bg-[#e67700] transition">
-                                Register
-                            </Link>
-                        </>
-                    )}
-                </div>
-            </nav>
+           
+           
 
             {/* ── BREADCRUMB ── */}
             <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 pt-6">

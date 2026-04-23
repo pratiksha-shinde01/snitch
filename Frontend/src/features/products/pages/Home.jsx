@@ -18,51 +18,7 @@ const Home = () => {
         <div className="min-h-screen bg-[#fafafa] text-[#111]">
 
             {/* NAVBAR */}
-            <nav className="flex items-center justify-between px-6 sm:px-10 lg:px-20 py-6 border-b border-gray-200 bg-white">
-
-                <Link
-                    to="/"
-                    className="text-xl font-bold tracking-widest text-[#FF8C00]"
-                >
-                    SNITCH.
-                </Link>
-
-                <div className="flex items-center gap-6 text-sm">
-
-                    {user ? (
-                        <>
-                            <span className="text-gray-700 font-medium">
-                                {user.fullname}
-                            </span>
-
-                            {user.role === 'seller' && (
-                                <Link
-                                    to="/seller/dashboard"
-                                    className="text-gray-600 hover:text-[#FF8C00] transition"
-                                >
-                                    Dashboard
-                                </Link>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <Link
-                                to="/login"
-                                className="text-gray-600 hover:text-[#FF8C00] transition"
-                            >
-                                Login
-                            </Link>
-
-                            <Link
-                                to="/register"
-                                className="bg-[#FF8C00] text-white px-4 py-2 rounded-md hover:bg-[#e67700] transition"
-                            >
-                                Register
-                            </Link>
-                        </>
-                    )}
-                </div>
-            </nav>
+          
 
             {/* HERO */}
             <div className="text-center py-20 px-6">
