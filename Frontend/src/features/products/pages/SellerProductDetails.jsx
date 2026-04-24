@@ -55,77 +55,90 @@ const SellerProductDetails = () => {
     };
 
     // Handlers for New Variant Form
-    const handleAddNewVariant = async () => {
-        // Validate required at least one attribute to be filled
-        const hasValidAttribute = attributeInputs.some(attr => attr.key.trim() && attr.value.trim());
-        if (!hasValidAttribute) {
-            alert("At least one valid attribute is required.");
-            return;
+ const handleAddNewVariant = async () => {
+
+    const sizeValue = newVariant.attributes.size;
+
+    if (!sizeValue) {
+        alert("Size is required");
+        return;
+    }
+
+    // 👇 Split sizes
+    const sizes = sizeValue.split(",").map(s => s.trim());
+
+    const variantsToCreate = sizes.map(size => ({
+        images: newVariant.images.map(img => ({
+            url: img.previewUrl,
+            file: img.file
+        })),
+        stock: Number(newVariant.stock),
+        attributes: {
+            ...newVariant.attributes,
+            size // 👈 each size separately
+        },
+        price: newVariant.price.amount
+            ? {
+                amount: Number(newVariant.price.amount),
+                currency: newVariant.price.currency || "INR"
+              }
+            : undefined
+    }));
+
+    // 👇 Add all locally
+    setLocalVariants(prev => [...prev, ...variantsToCreate]);
+
+    try {
+        for (const variant of variantsToCreate) {
+            await handleAddProductVariant(productId, variant);
         }
+    } catch (err) {
+        console.error(err);
+        alert("Error saving variants");
+    }
 
-        // Maps preview URL so the variant list can display the image locally
-        const cleanImages = newVariant.images.map(img => ({ url: img.previewUrl, file: img.file }));
-
-        // Attributes is already an object in newVariant, just use it safely
-        const cleanAttributes = { ...newVariant.attributes };
-
-        const variantToSave = {
-            images: cleanImages,
-            stock: Number(newVariant.stock),
-            attributes: cleanAttributes,
-            price: newVariant.price.amount
-                ? Number(newVariant.price.amount)
-                : undefined // price is optional
-        };
-
-        setLocalVariants([...localVariants, variantToSave]);
-        setIsAddingVariant(false);
-
-        await handleAddProductVariant(productId, variantToSave)
-
-        // Reset form
-        // Note: should ideally revoke old object URLs as well to prevent memory leaks if it were a long-lived SPA
-        setAttributeInputs([{ key: '', value: '' }]);
-        setNewVariant({
-            images: [],
-            stock: 0,
-            attributes: {},
-            price: { amount: '', currency: 'INR' }
-        });
-    };
+    setIsAddingVariant(false);
+};
 
     const handleAddAttribute = () => {
         setAttributeInputs(prev => [...prev, { key: '', value: '' }]);
     };
 
     const handleAttributeChange = (index, field, value) => {
-        const updatedInputs = [...attributeInputs];
-        updatedInputs[index][field] = value;
-        setAttributeInputs(updatedInputs);
+    const updatedInputs = [...attributeInputs];
+    updatedInputs[index][field] = value;
+    setAttributeInputs(updatedInputs);
 
-        // Synchronize to object format
-        const newAttrsObj = {};
-        updatedInputs.forEach(attr => {
-            if (attr.key.trim() !== '') {
-                newAttrsObj[attr.key.trim()] = attr.value;
-            }
-        });
-        setNewVariant(prev => ({ ...prev, attributes: newAttrsObj }));
-    };
+    // ✅ Normalize keys (VERY IMPORTANT)
+    const newAttrsObj = {};
+    updatedInputs.forEach(attr => {
+        const key = attr.key.trim().toLowerCase(); // normalize
+        const val = attr.value.trim();
 
-    const handleRemoveAttribute = (index) => {
-        const updatedInputs = attributeInputs.filter((_, i) => i !== index);
-        setAttributeInputs(updatedInputs);
+        if (key !== '') {
+            newAttrsObj[key] = val;
+        }
+    });
 
-        // Synchronize to object format
-        const newAttrsObj = {};
-        updatedInputs.forEach(attr => {
-            if (attr.key.trim() !== '') {
-                newAttrsObj[attr.key.trim()] = attr.value;
-            }
-        });
-        setNewVariant(prev => ({ ...prev, attributes: newAttrsObj }));
-    };
+    setNewVariant(prev => ({ ...prev, attributes: newAttrsObj }));
+};
+
+  const handleRemoveAttribute = (index) => {
+    const updatedInputs = attributeInputs.filter((_, i) => i !== index);
+    setAttributeInputs(updatedInputs);
+
+    const newAttrsObj = {};
+    updatedInputs.forEach(attr => {
+        const key = attr.key.trim().toLowerCase();
+        const val = attr.value.trim();
+
+        if (key !== '') {
+            newAttrsObj[key] = val;
+        }
+    });
+
+    setNewVariant(prev => ({ ...prev, attributes: newAttrsObj }));
+};
 
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files);
